@@ -22,27 +22,27 @@ const Navbar: React.FC<NavbarProps> = ({ cartItems, onOpenCart }) => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-orange-500 p-1.5 rounded-lg text-white transform group-hover:rotate-12 transition-transform">
-              <PawPrint size={24} fill="currentColor" />
+            <div className="bg-orange-600 p-2 rounded-xl text-white transform group-hover:rotate-12 transition-all shadow-sm">
+              <PawPrint size={20} fill="currentColor" />
             </div>
-            <span className="font-bold text-xl text-slate-800 tracking-tight">Pawradise</span>
+            <span className="font-black text-xl text-slate-900 tracking-tighter">Pawradise</span>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                   location.pathname === link.path && !location.search.includes('?') 
-                    ? 'text-orange-600'
-                    : 'text-slate-600 hover:text-orange-500'
+                    ? 'text-orange-600 bg-orange-50'
+                    : 'text-slate-600 hover:text-orange-500 hover:bg-slate-50'
                 }`}
               >
                 {link.name}
@@ -51,17 +51,17 @@ const Navbar: React.FC<NavbarProps> = ({ cartItems, onOpenCart }) => {
           </div>
 
           {/* Icons */}
-          <div className="flex items-center gap-4">
-            <button className="text-slate-500 hover:text-orange-500 transition-colors hidden sm:block">
+          <div className="flex items-center gap-1 md:gap-3">
+            <button className="p-2 text-slate-500 hover:text-orange-500 transition-colors hidden sm:block">
               <Search size={20} />
             </button>
             <button 
               onClick={onOpenCart}
-              className="relative p-2 text-slate-600 hover:text-orange-600 transition-colors"
+              className="relative p-2.5 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all"
             >
               <ShoppingCart size={22} />
               {totalItems > 0 && (
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-orange-500 rounded-full">
+                <span className="absolute top-1.5 right-1.5 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-black leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-orange-600 rounded-full border-2 border-white shadow-sm">
                   {totalItems}
                 </span>
               )}
@@ -69,32 +69,38 @@ const Navbar: React.FC<NavbarProps> = ({ cartItems, onOpenCart }) => {
             
             {/* Mobile Menu Button */}
             <button 
-              className="md:hidden p-2 text-slate-600"
+              className="md:hidden p-2 text-slate-600 active:scale-90 transition-transform"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 absolute w-full left-0 shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-orange-600 hover:bg-orange-50"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
+      <div 
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-slate-100 ${
+          isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="px-4 pt-2 pb-6 space-y-2">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={() => setIsMenuOpen(false)}
+              className={`block px-4 py-3 rounded-2xl text-base font-bold transition-all ${
+                location.pathname === link.path 
+                  ? 'bg-orange-50 text-orange-600' 
+                  : 'text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
-      )}
+      </div>
     </nav>
   );
 };

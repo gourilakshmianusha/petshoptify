@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { MOCK_PRODUCTS } from '../constants';
 import { Product, Category } from '../types';
-import { Filter } from 'lucide-react';
+import { Filter, SlidersHorizontal } from 'lucide-react';
 
 interface ShopProps {
   onAddToCart: (product: Product) => void;
@@ -17,7 +17,6 @@ const Shop: React.FC<ShopProps> = ({ onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>(initialCategory || 'All');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
 
-  // Update category if URL changes
   useEffect(() => {
     const cat = queryParams.get('category') as Category | null;
     if (cat) setSelectedCategory(cat);
@@ -35,12 +34,28 @@ const Shop: React.FC<ShopProps> = ({ onAddToCart }) => {
   const categories = ['All', ...Object.values(Category)];
 
   return (
-    <div className="bg-slate-50 min-h-screen py-12">
+    <div className="bg-slate-50 min-h-screen py-6 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Mobile Category Scroller */}
+        <div className="md:hidden mb-6 -mx-4 px-4 overflow-x-auto scrollbar-hide flex gap-2 pb-2">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat as Category | 'All')}
+              className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm ${
+                selectedCategory === cat 
+                  ? 'bg-orange-600 text-white' 
+                  : 'bg-white text-slate-600 border border-slate-100'
+              }`}
+            >
+              {cat === 'Small Pet' ? 'Small Pets' : cat === 'All' ? 'All' : cat + 's'}
+            </button>
+          ))}
+        </div>
+
         <div className="flex flex-col md:flex-row gap-8">
-          
-          {/* Filters Sidebar */}
-          <aside className="w-full md:w-64 flex-shrink-0 space-y-8">
+          {/* Desktop Filters Sidebar */}
+          <aside className="hidden md:block w-64 flex-shrink-0 space-y-8">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-24">
               <div className="flex items-center gap-2 mb-6 text-slate-800">
                 <Filter size={20} />
@@ -49,7 +64,7 @@ const Shop: React.FC<ShopProps> = ({ onAddToCart }) => {
               
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-semibold text-slate-700 mb-3">Categories</h4>
+                  <h4 className="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wider">Categories</h4>
                   <div className="space-y-2">
                     {categories.map(cat => (
                       <label key={cat} className="flex items-center gap-2 cursor-pointer group">
@@ -69,7 +84,7 @@ const Shop: React.FC<ShopProps> = ({ onAddToCart }) => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-slate-700 mb-3">Price Range</h4>
+                  <h4 className="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wider">Price Range</h4>
                   <div className="space-y-4">
                     <input 
                       type="range" 
@@ -79,7 +94,7 @@ const Shop: React.FC<ShopProps> = ({ onAddToCart }) => {
                       onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
                       className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600"
                     />
-                    <div className="flex justify-between text-sm text-slate-600 font-medium">
+                    <div className="flex justify-between text-xs text-slate-500 font-bold">
                       <span>$0</span>
                       <span>${priceRange[1]}</span>
                     </div>
@@ -91,27 +106,31 @@ const Shop: React.FC<ShopProps> = ({ onAddToCart }) => {
 
           {/* Product Grid */}
           <div className="flex-1">
-            <div className="mb-6 flex justify-between items-center">
-              <h1 className="text-2xl font-bold text-slate-900">
-                {selectedCategory === 'All' ? 'All Products' : `${selectedCategory} Supplies`}
+            <div className="mb-6 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900">
+                {selectedCategory === 'All' ? 'Our Entire Collection' : `${selectedCategory} Supplies`}
               </h1>
-              <span className="text-slate-500 text-sm">Showing {filteredProducts.length} results</span>
+              <div className="flex items-center gap-2 text-slate-500 text-sm font-medium bg-white px-3 py-1 rounded-lg border border-slate-100 shadow-sm self-start sm:self-auto">
+                <SlidersHorizontal size={14} />
+                {filteredProducts.length} Products
+              </div>
             </div>
 
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {filteredProducts.map(product => (
                   <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
                 ))}
               </div>
             ) : (
-              <div className="bg-white p-12 rounded-2xl text-center border border-dashed border-slate-300">
+              <div className="bg-white p-12 rounded-3xl text-center border border-dashed border-slate-300">
+                <div className="text-4xl mb-4">😿</div>
                 <p className="text-slate-500 text-lg">No products found matching your criteria.</p>
                 <button 
                   onClick={() => {setSelectedCategory('All'); setPriceRange([0, 200]);}}
-                  className="mt-4 text-orange-600 font-medium hover:underline"
+                  className="mt-4 px-6 py-2 bg-orange-100 text-orange-600 rounded-full font-bold hover:bg-orange-200 transition-all"
                 >
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </div>
             )}

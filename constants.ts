@@ -76,13 +76,13 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: '8',
     name: 'Automatic Pet Feeder',
-    description: 'Programmable feeder with voice recording and portion control. WiFi enabled.',
+    description: 'Programmable smart feeder with voice recording, portion control, and WiFi connectivity.',
     price: 89.99,
     category: Category.ACCESSORIES,
-    image: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=800&q=80',
     rating: 4.3,
     reviews: 98,
-    badge: 'Tech'
+    badge: 'Smart'
   },
   {
     id: '9',
@@ -97,7 +97,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: '10',
     name: 'Reflective Dog Leash',
-    description: 'Heavy-duty 5ft leash with padded handle and reflective stitching for night safety.',
+    description: 'Heavy-duty 5ft leash with padded handle and high-visibility reflective stitching.',
     price: 18.50,
     category: Category.DOG,
     image: 'https://images.unsplash.com/photo-1605639156481-244775d6f803?auto=format&fit=crop&w=800&q=80',

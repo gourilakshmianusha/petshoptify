@@ -6,6 +6,8 @@ import AiAssistant from './components/AiAssistant';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
+import Checkout from './pages/Checkout';
+import OrderSuccess from './pages/OrderSuccess';
 import { CartItem, Product } from './types';
 
 const App: React.FC = () => {
@@ -58,6 +60,11 @@ const App: React.FC = () => {
     setCartItems(prev => prev.filter(item => item.id !== id));
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem('pawradise_cart');
+  };
+
   return (
     <Router>
       <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
@@ -76,6 +83,8 @@ const App: React.FC = () => {
             <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
             <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
             <Route path="/product/:id" element={<ProductDetails onAddToCart={handleAddToCart} />} />
+            <Route path="/checkout" element={<Checkout cartItems={cartItems} clearCart={clearCart} />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
           </Routes>
         </main>
 

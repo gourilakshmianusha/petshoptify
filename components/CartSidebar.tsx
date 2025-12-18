@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { CartItem } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -17,7 +18,13 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
   onUpdateQuantity,
   onRemoveItem 
 }) => {
+  const navigate = useNavigate();
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const handleCheckoutClick = () => {
+    onClose();
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -136,7 +143,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
               </div>
               <button 
                 className="w-full bg-orange-600 text-white py-3.5 rounded-xl font-bold text-lg shadow-lg hover:bg-orange-700 hover:shadow-xl transition-all flex items-center justify-center gap-2 group"
-                onClick={() => alert("Checkout not implemented in demo!")}
+                onClick={handleCheckoutClick}
               >
                 Checkout <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
